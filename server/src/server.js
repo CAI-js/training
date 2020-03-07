@@ -1,5 +1,6 @@
 const { dock } = require('@nlpjs/basic');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const express = require('express');
 const passport = require('passport');
 const db = require('./core/database');
@@ -29,6 +30,7 @@ class Server {
     this.port =
       this.settings.port || process.env.PORT || process.env.port || 3000;
     this.app = express();
+    this.app.use(cors());
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(bodyParser.json());
     this.app.use(passport.initialize());
