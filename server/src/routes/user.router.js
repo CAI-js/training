@@ -179,10 +179,6 @@ router.post('/auth/local/refresh', refresh);
  *      responses:
  *        "200":
  *          description: A new user is created
- *          content:
- *            application/json:
- *              schema:
- *                $ref: '#/components/schemas/User'
  *        "409":
  *          description: User already exists
  */
