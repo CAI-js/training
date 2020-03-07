@@ -162,7 +162,6 @@ router.post('/auth/local/login', login);
  */
 router.post('/auth/local/refresh', refresh);
 
-
 /**
  * @swagger
  * path:

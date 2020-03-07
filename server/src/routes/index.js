@@ -1,10 +1,9 @@
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const userRouter = require('./user.router');
 const agentRouter = require('./agent.router');
 const domainRouter = require('./domain.router');
 const intentRouter = require('./intent.router');
-
-const swaggerJsdoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
 
 const apiRoot = '/api';
 
@@ -16,33 +15,32 @@ function mount(app) {
 
   const options = {
     swaggerDefinition: {
-      openapi: "3.0.0",
+      openapi: '3.0.0',
       info: {
-        title: "Chatbot Trainer",
-        version: "1.0.0",
-        description:
-          "API for the NLP.js Chatbot Trainer",
+        title: 'Chatbot Trainer',
+        version: '1.0.0',
+        description: 'API for the NLP.js Chatbot Trainer',
         license: {
-          name: "MIT",
-          url: "https://choosealicense.com/licenses/mit/"
+          name: 'MIT',
+          url: 'https://choosealicense.com/licenses/mit/',
         },
         contact: {
-          name: "Swagger",
-          url: "https://swagger.io",
-          email: "Info@SmartBear.com"
-        }
+          name: 'Swagger',
+          url: 'https://swagger.io',
+          email: 'Info@SmartBear.com',
+        },
       },
       servers: [
         {
-          url: "http://localhost:4891/api"
-        }
-      ]
+          url: 'http://localhost:4891/api',
+        },
+      ],
     },
-    apis: ["./**/*.router.js"]
+    apis: ['./**/*.router.js'],
   };
   const specs = swaggerJsdoc(options);
-  app.use("/docs", swaggerUi.serve);
-  app.get("/docs", swaggerUi.setup(specs, { explorer: true }));
+  app.use('/docs', swaggerUi.serve);
+  app.get('/docs', swaggerUi.setup(specs, { explorer: true }));
 }
 
 module.exports = mount;
