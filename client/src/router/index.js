@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import {lsGet} from '@/localStorage'
+import { getToken, getRefreshToken } from '../api/jwt'
 
 Vue.use(VueRouter)
 
@@ -11,12 +11,11 @@ const routes = [
     name: 'Home',
     component: Home,
     beforeEnter: (to, from, next) => {
-      const tokenExists = !!lsGet('access_token') && !!lsGet('refresh_token')
+      const tokenExists = !!getToken() && !!getRefreshToken()
       if (tokenExists) {
-        next()
-        return;
+        return next()
       }
-      next({name: 'Login'})
+      return next({name: 'Login'})
     }
   },
   {

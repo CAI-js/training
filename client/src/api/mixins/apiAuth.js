@@ -1,30 +1,14 @@
 import {api, genericErrorManagement} from '../helper'
-import {lsSet} from '@/localStorage'
+import {setToken} from '../jwt'
 
 export default {
   methods: {
     apiLogin({email, password}) {
       return api.post('auth/local/login', {email, password})
-      .then(data => {
-        ['access_token', 'refresh_token'].forEach(name => {
-          lsSet(name, data[name])
-        })
-        const expirationDate = Date.now() + (data.expires * 1000)
-        lsSet('expires', expirationDate)
-      })
+      .then(setToken)
       .catch(error => {
         if (error.status && error.status === 404) {
           return Promise.reject('API error: User or password invalid')
-        } else {
-          genericErrorManagement(error)
-        }
-      })
-    },
-    apiRefresh({email, refreshToken}) {
-      return api.post('auth/local/refresh', {email, refreshToken})
-      .catch(error => {
-        if (error.status && error.status === 401) {
-          return Promise.reject('API error: Invalid user token')
         } else {
           genericErrorManagement(error)
         }
