@@ -41,7 +41,6 @@ function mount(app) {
     apis: ["./**/*.router.js"]
   };
   const specs = swaggerJsdoc(options);
-  console.log(specs);
   app.use("/docs", swaggerUi.serve);
   app.get("/docs", swaggerUi.setup(specs, { explorer: true }));
 }

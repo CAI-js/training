@@ -89,8 +89,6 @@ const router = express.Router();
  */
 router.get(route, ensureAuthenticated, controller.findAllAgents);
 
-router.post(route, ensureAuthenticated, controller.createAgent);
-
 /**
  * @swagger
  * path:
@@ -115,6 +113,88 @@ router.post(route, ensureAuthenticated, controller.createAgent);
  *          description: You have no access
  */
 router.get(routeId, ensureAuthenticated, controller.findAgentById);
+
+/**
+ * @swagger
+ * path:
+ *  /agents:
+ *    post:
+ *      summary: Create a new agent
+ *      tags: [Agent]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Agent'
+ *      responses:
+ *        "200":
+ *          description: The agent created
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Agent'
+ *        "401":
+ *          description: You have no access
+ *        "400":
+ *          description: Agent name is mandatory
+ *        "409":
+ *          description: Agent with same tag already exists
+ */
+router.post(route, ensureAuthenticated, controller.createAgent);
+
+/**
+ * @swagger
+ * path:
+ *  /agents/{agentId}:
+ *    put:
+ *      summary: Modify an existing agent
+ *      tags: [Agent]
+ *      parameters:
+ *        - in: path
+ *          name: agentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the agent
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Agent'
+ *      responses:
+ *        "200":
+ *          description: The agent modified
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Agent'
+ *        "401":
+ *          description: You have no access
+ *        "400":
+ *          description: Agent name is mandatory
+ *        "409":
+ *          description: Agent with same tag already exists
+ */
 router.put(routeId, ensureAuthenticated, controller.updateAgent);
+/**
+ * @swagger
+ * path:
+ *  /agents/{agentId}:
+ *    delete:
+ *      summary: Modify an existing agent
+ *      tags: [Agent]
+ *      parameters:
+ *        - in: path
+ *          name: agentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the agent
+ *      responses:
+ *        "200":
+ *          description: The agent is deleted
+ *        "401":
+ *          description: You have no access
+ */
 router.delete(routeId, ensureAuthenticated, controller.deleteAgent);
 module.exports = router;

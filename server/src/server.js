@@ -35,7 +35,6 @@ class Server {
     this.app.use('/public', express.static(`${process.cwd()}../public`));
     mount(this.app);
     this.app.use(function(error, req, res, next) {
-      console.log(error);
       if (error.message) {
         return res.status(error.status || 500).json({ error: error.message });
       }
