@@ -1,14 +1,16 @@
 import {api, genericErrorManagement} from '../helper'
-import {lsSet} from '../localStorage'
+import {lsSet} from '@/localStorage'
 
 export default {
   methods: {
     apiLogin({email, password}) {
       return api.post('auth/local/login', {email, password})
       .then(data => {
-        ['access_token', 'refresh_token', 'expires'].forEach(name => {
+        ['access_token', 'refresh_token'].forEach(name => {
           lsSet(name, data[name])
         })
+        const expirationDate = Date.now() + (data.expires * 1000)
+        lsSet('expires', expirationDate)
       })
       .catch(error => {
         if (error.status && error.status === 404) {
