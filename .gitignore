@@ -1,5 +1,7 @@
+/client/dist
 coverage
 node_modules
+package-lock.json
 .env
 .vscode
 .idea
