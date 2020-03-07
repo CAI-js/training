@@ -10,8 +10,12 @@ function getIntentsByDomain(domainId) {
   return database.find(Collections.Intent, { domainId });
 }
 
-async function intentExistsByTag(agentId, tag) {
-  const intents = await database.find(Collections.Intent, { agentId, tag });
+async function intentExistsByTag(agentId, domainId, tag) {
+  const intents = await database.find(Collections.Intent, {
+    agentId,
+    domainId,
+    tag,
+  });
   return intents && intents.length > 0;
 }
 
@@ -80,9 +84,11 @@ async function createIntent(req, res) {
     }
     const { name } = req.body;
     const tag = stringToTag(name);
-    const alreadyExists = await intentExistsByTag(agentId, tag);
+    const alreadyExists = await intentExistsByTag(agentId, domainId, tag);
     if (alreadyExists) {
-      return res.status(409).send('Intent with same tag already exists');
+      return res
+        .status(409)
+        .send('Intent with same tag already exists in this domain');
     }
     const intent = {
       name,
