@@ -7,7 +7,7 @@ const {
   jwtSecret,
   jwtAlgorithm,
 } = require('../core/auth/defaults');
-const { database } = require('../core/database');
+const database = require('../core/database');
 const { idField, Collections } = require('./constants');
 
 const refreshTokens = {};
