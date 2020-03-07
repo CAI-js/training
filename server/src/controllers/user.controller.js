@@ -20,11 +20,13 @@ function login(req, res) {
     }
     const payload = {
       sub: user[idField],
+      name: user.name,
       email: user.email,
     };
     const refreshToken = uuid();
     refreshTokens[refreshToken] = {
       email: payload.email,
+      name: payload.name,
       sub: payload.sub,
     };
     const token = jwt.sign(payload, jwtSecret, {
@@ -53,6 +55,7 @@ function refresh(req, res) {
   const payload = {
     sub: refreshData.sub,
     email: refreshData.email,
+    name: refreshData.name,
   };
   const token = jwt.sign(payload, jwtSecret, {
     algorithm: jwtAlgorithm,
