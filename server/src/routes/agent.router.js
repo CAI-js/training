@@ -62,7 +62,6 @@ const { ensureAuthenticated } = require('../core/auth');
  *           status: Ready
  */
 
-
 const route = '/agents';
 const routeId = '/agents/:agentId';
 
