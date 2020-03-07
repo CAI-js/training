@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login section">
     <div class="card">
       <div class="card-content">
         <h1 class="title">Login</h1>
@@ -84,6 +84,7 @@ export default Vue.extend({
 .login {
   display: grid;
   justify-content: center;
+  align-content: flex-start;
 }
 .error-message {
   margin-bottom: 1rem;

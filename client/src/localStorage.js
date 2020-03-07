@@ -7,4 +7,8 @@ function lsGet(name) {
   return result ? JSON.parse(result) : result
 }
 
-export {lsSet, lsGet}
+function lsClear() {
+  return localStorage.clear()
+}
+
+export {lsSet, lsGet, lsClear}
