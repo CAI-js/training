@@ -84,7 +84,7 @@ function register(req, res, next) {
       database
         .insertOne(Collections.User, document)
         .then(newUser => {
-          res.json({ data: newUser });
+          res.status(200).send('User created');
         })
         .catch(errCreating => next(errCreating));
     })
