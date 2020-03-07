@@ -6,6 +6,7 @@ const {
   jwtExpiration,
   jwtSecret,
   jwtAlgorithm,
+  jwtExpirationSeconds,
 } = require('../core/auth/defaults');
 const database = require('../core/database');
 const { idField, Collections } = require('./constants');
@@ -30,7 +31,12 @@ function login(req, res) {
       algorithm: jwtAlgorithm,
       expiresIn: jwtExpiration,
     });
-    return res.json({ token, refreshToken });
+    return res.json({
+      access_token: token,
+      refresh_token: refreshToken,
+      token_type: 'bearer',
+      expires: jwtExpirationSeconds,
+    });
   })(req, res);
 }
 
@@ -41,6 +47,9 @@ function refresh(req, res) {
   if (!refreshData || refreshData.email !== email) {
     return res.status(401).send('Invalid refresh token');
   }
+  const newRefreshToken = uuid();
+  delete refreshTokens[refreshTokens];
+  refreshTokens[newRefreshToken] = refreshData;
   const payload = {
     sub: refreshData.sub,
     email: refreshData.email,
@@ -49,7 +58,12 @@ function refresh(req, res) {
     algorithm: jwtAlgorithm,
     expiresIn: jwtExpiration,
   });
-  return res.json({ token });
+  return res.json({
+    access_token: token,
+    refresh_token: newRefreshToken,
+    token_type: 'bearer',
+    expires: jwtExpirationSeconds,
+  });
 }
 
 function register(req, res, next) {

@@ -64,18 +64,28 @@ const { ensureAuthenticated } = require('../core/auth');
  *      AuthToken:
  *        type: object
  *        required:
- *          - token
- *          - refreshToken
+ *          - access_token
+ *          - refresh_token
+ *          - token_type
+ *          - expires
  *        properties:
- *          token:
+ *          access_token:
  *            type: string
  *            description: Authorization bearer token.
- *          refreshToken:
+ *          refresh_token:
  *            type: string
  *            description: Refresh token.
+ *          token_type:
+ *            type: string
+ *            description: value is bearer
+ *          expires:
+ *             type: number
+ *             description: number of seconds for token expiration
  *        example:
- *           token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTdmZmFiOC0wM2RlLWNkZTEtNDVjMy03ZWE5YTJmNjFlNTYiLCJlbWFpbCI6ImpzZWlqYXNAZ21haWwuY29tIiwiaWF0IjoxNTgzMzQ5MDU0LCJleHAiOjE1ODMzNDkxMTR9.ftDxHN-EqBMIqxatjjyYwfD_l2wKBaiJO1lTE9DPTX8
- *           refreshToken: 9ea97d38-873a-b680-a236-16feb6bd4590
+ *           access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTdmZmFiOC0wM2RlLWNkZTEtNDVjMy03ZWE5YTJmNjFlNTYiLCJlbWFpbCI6ImpzZWlqYXNAZ21haWwuY29tIiwiaWF0IjoxNTgzMzQ5MDU0LCJleHAiOjE1ODMzNDkxMTR9.ftDxHN-EqBMIqxatjjyYwfD_l2wKBaiJO1lTE9DPTX8
+ *           refresh_token: 9ea97d38-873a-b680-a236-16feb6bd4590
+ *           token_type: bearer
+ *           expires: 900
  */
 
 /**
@@ -98,22 +108,6 @@ const { ensureAuthenticated } = require('../core/auth');
  *        example:
  *           email: anna@email.com
  *           refreshToken: 9ea97d38-873a-b680-a236-16feb6bd4590
- */
-
-/**
- * @swagger
- *  components:
- *    schemas:
- *      AuthRefreshResponse:
- *        type: object
- *        required:
- *          - token
- *        properties:
- *          token:
- *            type: string
- *            description: token.
- *        example:
- *           token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTdmZmFiOC0wM2RlLWNkZTEtNDVjMy03ZWE5YTJmNjFlNTYiLCJlbWFpbCI6ImpzZWlqYXNAZ21haWwuY29tIiwiaWF0IjoxNTgzMzQ5MDU0LCJleHAiOjE1ODMzNDkxMTR9.ftDxHN-EqBMIqxatjjyYwfD_l2wKBaiJO1lTE9DPTX8
  */
 
 const router = express.Router();
@@ -162,7 +156,7 @@ router.post('/auth/local/login', login);
  *          content:
  *            application/json:
  *              schema:
- *                $ref: '#/components/schemas/AuthRefreshResponse'
+ *                $ref: '#/components/schemas/AuthToken'
  *        "401":
  *          description: Invalid refresh token
  */
