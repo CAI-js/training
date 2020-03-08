@@ -13,6 +13,9 @@
 #cai-js-main>* {
   width: 100%;
 }
+.modal .animation-content {
+  width: 70%;
+}
 </style>
 
 
