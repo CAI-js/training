@@ -32,8 +32,11 @@ async function getAgentsFiltered(email, isAdmin) {
 
 async function getAgentByIdFiltered(id, email, isAdmin) {
   const agent = await getAgentById(id);
-  const filtered = applyFilter(agent, email, isAdmin);
-  return filtered;
+  if (agent) {
+    const filtered = applyFilter(agent, email, isAdmin);
+    return filtered;
+  }
+  return undefined;
 }
 
 function stringToTag(name) {

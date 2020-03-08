@@ -77,7 +77,7 @@ async function updateAgent(req, res) {
     };
     await database.save(Collections.Agent, newAgent);
     const result = await getAgentByIdFiltered(
-      newAgent[idField],
+      newAgent[idField].toString(),
       req.user.email,
       req.user.isAdmin
     );
