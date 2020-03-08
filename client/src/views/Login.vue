@@ -19,12 +19,11 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import LoginForm from '@/components/LoginForm.vue'
 import apiAuth from '../api/mixins/apiAuth'
 
-export default Vue.extend({
+export default {
   components: {
     LoginForm
   },
@@ -78,7 +77,7 @@ export default Vue.extend({
         })
     }
   }
-})
+}
 </script>
 <style scoped>
 .login {
