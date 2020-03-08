@@ -12,6 +12,16 @@ export default {
         }
       })
     },
+    apiGetAgent(id) {
+      return api.get(`agents/${id}`)
+      .catch(error => {
+        if (error.status && error.status === 401) {
+          return Promise.reject('API error: User not logged in')
+        } else {
+          genericErrorManagement(error)
+        }
+      })
+    },
     apiPostAgent({ name, description, readers, writers }) {
       return api.post('agents/', { name, description, readers, writers })
         .catch(error => {

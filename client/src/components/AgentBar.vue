@@ -2,9 +2,19 @@
   <div class="has-background-primary wrapper">
     <div class="agent-management">
       <img class="agent-image" src="../assets/chatbot.svg" alt />
-      <b-button type="is-primary" inverted icon-right="plus" @click="clickNewAgent">Create new agent</b-button>
+      <b-field class="agent-selector" v-show="agents.length > 0" aria-label="Agent selector" type="is-primary">
+          <b-select placeholder="Select an agent" expanded @input="onSelectAgent">
+              <option
+                  v-for="agent in agents"
+                  :value="agent._id"
+                  :key="agent._id">
+                  {{ agent.name }}
+              </option>
+          </b-select>
+      </b-field>
+      <b-button type="is-primary" inverted :outlined="agents.length > 0" icon-right="plus" @click="clickNewAgent">Create new agent</b-button>
     </div>
-    <div class="training-menu"></div>
+    <agent-menu v-if="$route.params.id"/>
     <b-modal
       :active.sync="openNewAgentModal"
       trap-focus
@@ -33,12 +43,14 @@
 </template>
 <script>
 import apiAgent from '@/api/mixins/apiAgent';
+import AgentMenu from './AgentMenu';
 
 export default {
   name: "AgentBar",
   mixins: [apiAgent],
   components: {
-    'new-agent-form': () => import(/* webpackChunkName: "extras" */'./NewAgentForm')
+    'new-agent-form': () => import(/* webpackChunkName: "extras" */'./NewAgentForm'),
+    'agent-menu': AgentMenu
   },
   data() {
     return {
@@ -74,6 +86,9 @@ export default {
         this.agentData = data
       }
     },
+    onSelectAgent(agentId) {
+      this.$router.push({name: 'Agent', params: {id: agentId}})
+    }
   }
 };
 </script>
@@ -91,6 +106,10 @@ export default {
   width: 100%;
   max-width: 150px;
   margin-bottom: 1rem;
+}
+.agent-selector {
+  width: 100%;
+  margin-top: 0.5rem;
 }
 .error-message {
   margin-bottom: 1rem;
