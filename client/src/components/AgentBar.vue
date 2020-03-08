@@ -3,11 +3,12 @@
     <div class="agent-management">
       <img class="agent-image" src="../assets/chatbot.svg" alt />
       <b-field class="agent-selector" v-show="agents.length > 0" aria-label="Agent selector" type="is-primary">
-          <b-select placeholder="Select an agent" expanded @input="onSelectAgent">
+          <b-select placeholder="Select an agent" expanded @input="onSelectAgent" :value="$route.params.id">
               <option
                   v-for="agent in agents"
                   :value="agent._id"
-                  :key="agent._id">
+                  :key="agent._id"
+                  >
                   {{ agent.name }}
               </option>
           </b-select>
@@ -15,18 +16,13 @@
       <b-button type="is-primary" inverted :outlined="agents.length > 0" icon-right="plus" @click="clickNewAgent">Create new agent</b-button>
     </div>
     <agent-menu v-if="$route.params.id"/>
-    <b-modal
-      :active.sync="openNewAgentModal"
-      trap-focus
-      aria-role="dialog"
-      aria-modal
-      has-modal-card
+    <dialog-base
+      title="New agent"
+      :error-message="errorMessage"
+      :open="openNewAgentModal"
+      @close="openNewAgentModal = false"
     >
-      <div class="card">
-        <div class="card-content">
-          <h1 class="title">New agent</h1>
-        <p class="has-text-danger error-message" v-if="errorMessage">{{errorMessage}}</p>
-          <new-agent-form @form-valid-change="onFormValidChange"/>
+          <new-agent-form @form-change="onFormChange"/>
           <div class="level">
             <b-button
               @click="clickSubmitAgent"
@@ -36,9 +32,7 @@
               Create
             </b-button>
           </div>
-        </div>
-      </div>
-    </b-modal>
+    </dialog-base>
   </div>
 </template>
 <script>
@@ -50,7 +44,8 @@ export default {
   mixins: [apiAgent],
   components: {
     'new-agent-form': () => import(/* webpackChunkName: "extras" */'./NewAgentForm'),
-    'agent-menu': AgentMenu
+    'agent-menu': AgentMenu,
+    'dialog-base': () => import(/* webpackChunkName: "extras" */'./micro/DialogBase'),
   },
   data() {
     return {
@@ -79,7 +74,7 @@ export default {
           this.errorMessage = error
         })
     },
-    onFormValidChange ({valid, data}) {
+    onFormChange ({valid, data}) {
       this.errorMessage = ''
       this.isValidForm = valid
       if (valid) {
@@ -89,7 +84,7 @@ export default {
     onSelectAgent(agentId) {
       this.$router.push({name: 'Agent', params: {id: agentId}})
     }
-  }
+  },
 };
 </script>
 <style scoped>
@@ -110,9 +105,6 @@ export default {
 .agent-selector {
   width: 100%;
   margin-top: 0.5rem;
-}
-.error-message {
-  margin-bottom: 1rem;
 }
 .level {
   margin-top: 2em;

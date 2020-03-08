@@ -35,7 +35,7 @@ async function doCall(url, fetchOptions) {
       return Promise.reject(result)
     }
   } catch (error) {
-    console.log('MSG: doCall -> error', error)
+    console.log(`MSG: doCall -> error ${path}`, error)
     return Promise.reject(new Error('Network error: check your connection and try again'))
   }
 }

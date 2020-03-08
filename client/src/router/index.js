@@ -19,10 +19,24 @@ const routes = [
     beforeEnter: requireLogin,
   },
   {
-    path: '/:id',
+    path: '/:id/',
     name: 'Agent',
     component: Home,
-    beforeEnter: requireLogin
+    redirect: '/:id/domains',
+    children: [
+      {
+        path: '/:id/domains',
+        name: 'Domains',
+        component: () => import(/* webpackChunkName: "agent" */ '../views/Domains.vue'),
+        beforeEnter: requireLogin,
+      },
+      {
+        path: '/:id/intents',
+        name: 'Intents',
+        component: () => import(/* webpackChunkName: "agent" */ '../views/Intents.vue'),
+        beforeEnter: requireLogin,
+      },
+    ]
   },
   {
     path: '/login',

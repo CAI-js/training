@@ -1,5 +1,5 @@
 <template>
-  <form @change="validateForm">
+  <form @change="formChange">
     <b-field label="Name">
       <b-input type="text" v-model="name" required></b-input>
     </b-field>
@@ -60,6 +60,17 @@ export default {
         writers: this.parsedWriters ? !areValidEmails(this.parsedWriters) : false
       }
     },
+    formChange() {
+      this.validateForm()
+      this.$emit('form-change', {
+      valid: this.formIsValid,
+      data: {
+        name: this.name,
+        description: this.description,
+        readers: this.parsedReaders,
+        writers: this.parsedWriters
+      }})
+    }
   },
   computed: {
     formIsValid() {
@@ -77,17 +88,5 @@ export default {
       return separateEmails(this.writers)
     }
   },
-  watch: {
-    formIsValid: function (newValue) {
-      this.$emit('form-valid-change', {
-        valid: newValue,
-        data: {
-          name: this.name,
-          description: this.description,
-          readers: this.parsedReaders,
-          writers: this.parsedWriters
-        }})
-    }
-  }
 }
 </script>

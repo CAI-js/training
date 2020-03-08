@@ -1,7 +1,7 @@
 <template>
-  <div class="wrapper has-background-light">
+  <div class="wrapper has-background-primary">
     <b-dropdown aria-role="menu" class="is-pulled-right" position="is-bottom-left">
-      <b-button slot="trigger" size="is-medium" type="is-primary" icon-right="menu-down" outlined aria-label="user menu">
+      <b-button slot="trigger" size="is-medium" type="is-primary" icon-right="menu-down" outlined inverted aria-label="user menu">
         <b-icon size="is-medium" icon="account"></b-icon>
       </b-button>
       <b-dropdown-item aria-role="menuitem" @click="clickLogOut">Log out</b-dropdown-item>
