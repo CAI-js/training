@@ -1,5 +1,5 @@
 <template>
-  <form @change="validateForm" ref="form">
+  <form @change="validateForm">
     <b-field v-show="fullForm" label="Name">
       <b-input type="text" v-model="name" :required="fullForm"></b-input>
     </b-field>
@@ -14,9 +14,8 @@
     </b-field>
   </form>
 </template>
-<script lang="ts">
-import Vue from "vue";
-export default Vue.extend({
+<script>
+export default {
   name: "LoginForm",
   props: {
     fullForm: {
@@ -61,5 +60,5 @@ export default Vue.extend({
         data: {name: this.name, email: this.email, password: this.password }})
     }
   }
-});
+}
 </script>

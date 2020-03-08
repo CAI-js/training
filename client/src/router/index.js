@@ -4,19 +4,25 @@ import Home from '../views/Home.vue'
 import { getToken, getRefreshToken } from '../api/jwt'
 
 Vue.use(VueRouter)
-
+function requireLogin(to, from, next) {
+  const tokenExists = !!getToken() && !!getRefreshToken()
+  if (tokenExists) {
+    return next()
+  }
+  return next({name: 'Login'})
+}
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
-    beforeEnter: (to, from, next) => {
-      const tokenExists = !!getToken() && !!getRefreshToken()
-      if (tokenExists) {
-        return next()
-      }
-      return next({name: 'Login'})
-    }
+    beforeEnter: requireLogin,
+  },
+  {
+    path: '/:id',
+    name: 'Agent',
+    component: Home,
+    beforeEnter: requireLogin
   },
   {
     path: '/login',
