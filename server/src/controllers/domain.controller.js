@@ -72,6 +72,7 @@ async function updateDomain(req, res) {
     }
     const agentId = agent[idField];
     const domain = await database.findById(Collections.Domain, domainId);
+    // TODO: Always returns 404 because domain.agentId is string and angentId is Object
     if (!domain || domain.agentId !== agentId) {
       return res.status(404).send('Domain not found');
     }
@@ -104,6 +105,7 @@ async function deleteDomain(req, res) {
     }
     const agentId = agent[idField];
     const domain = await database.findById(Collections.Domain, domainId);
+    // TODO: Always returns 404 because domain.agentId is string and angentId is Object
     if (!domain || domain.agentId !== agentId) {
       return res.status(404).send('Domain not found');
     }

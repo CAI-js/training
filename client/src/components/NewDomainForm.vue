@@ -1,7 +1,7 @@
 <template>
   <form @change="formChange">
     <b-field label="Name">
-      <b-input type="text" v-model="name" required></b-input>
+      <b-input type="text" v-model="name" required :disabled="this.initialData"></b-input>
     </b-field>
     <b-field label="Language">
       <b-input type="text" v-model="language"></b-input>
@@ -13,15 +13,18 @@
 export default {
   name: "NewDomainForm",
   props: {
-    fullForm: {
-      type: Boolean,
-      default: false
+    initialData: {
+      type: Object,
+      default: {
+        name: '',
+        language: ''
+      }
     }
   },
   data() {
     return {
-      name: '',
-      language: '',
+      name: this.initialData.name,
+      language: this.initialData.language,
       errors: {
         name: true,
         language: false,

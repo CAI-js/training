@@ -15,6 +15,7 @@ async function getHeaders() {
       })
       .then(setToken)
       .catch(() => {
+        // TODO: Add callback parameter
         window.location.href="/#/login"
       })
   }
@@ -55,9 +56,28 @@ async function apiPost (url, data) {
     body: JSON.stringify(data)
   })
 }
+async function apiDelete (url) {
+  const headers = await getHeaders()
+  return doCall(url, {
+    method: 'DELETE',
+    mode: 'cors',
+    headers,
+  })
+}
+async function apiPut (url, data) {
+  const headers = await getHeaders()
+  return doCall(url, {
+    method: 'PUT',
+    mode: 'cors',
+    headers,
+    body: JSON.stringify(data)
+  })
+}
 const api = {
   get: apiGet,
   post: apiPost,
+  'delete': apiDelete,
+  put: apiPut,
 }
 
 function genericErrorManagement(error) {
