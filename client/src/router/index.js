@@ -19,6 +19,11 @@ const routes = [
     beforeEnter: requireLogin,
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
+  },
+  {
     path: '/:id/',
     name: 'Agent',
     component: Home,
@@ -38,11 +43,6 @@ const routes = [
       },
     ]
   },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
-  }
 ]
 
 const router = new VueRouter({
