@@ -8,7 +8,7 @@ export default {
         if (error.status && error.status === 401) {
           return Promise.reject('API error: User not logged in')
         } else {
-          genericErrorManagement(error)
+          return genericErrorManagement(error)
         }
       })
     },
@@ -18,7 +18,7 @@ export default {
         if (error.status && error.status === 401) {
           return Promise.reject('API error: User not logged in')
         } else {
-          genericErrorManagement(error)
+          return genericErrorManagement(error)
         }
       })
     },
@@ -34,11 +34,11 @@ export default {
               case 409:
                 return Promise.reject('API error: Agent with the same tag already exists')
               default:
-                genericErrorManagement(error)
+                return genericErrorManagement(error)
                 break;
             }
           } else {
-            genericErrorManagement(error)
+            return genericErrorManagement(error)
           }
         })
     },

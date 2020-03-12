@@ -10,7 +10,7 @@ export default {
         if (error.status && error.status === 404) {
           return Promise.reject('API error: User or password invalid')
         } else {
-          genericErrorManagement(error)
+          return genericErrorManagement(error)
         }
       })
     },
@@ -20,7 +20,7 @@ export default {
           if (error.status && error.status === 409) {
             return Promise.reject('API error: User already exists')
           } else {
-            genericErrorManagement(error)
+            return genericErrorManagement(error)
           }
         })
     },
