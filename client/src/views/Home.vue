@@ -30,5 +30,7 @@ export default {
   grid-template-areas: "user user user" "agent main demo";
   grid-template-rows: min-content 1fr;
   grid-template-columns: max-content 1fr max-content;
+  height: 100vh;
+  overflow: hidden;
 }
 </style>
