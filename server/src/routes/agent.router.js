@@ -181,7 +181,7 @@ router.put(routeId, ensureAuthenticated, controller.updateAgent);
  * path:
  *  /agents/{agentId}:
  *    delete:
- *      summary: Modify an existing agent
+ *      summary: Remove an existing agent
  *      tags: [Agent]
  *      parameters:
  *        - in: path

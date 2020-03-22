@@ -140,7 +140,7 @@ router.get(routeId, ensureAuthenticated, controller.findDomainById);
  * path:
  *  /agents/{agentId}/domains/{domainId}:
  *    put:
- *      summary: Get one domain
+ *      summary: Modify an existing domain
  *      parameters:
  *        - in: path
  *          name: agentId
@@ -176,7 +176,7 @@ router.put(routeId, ensureAuthenticated, controller.updateDomain);
  * path:
  *  /agents/{agentId}/domains/{domainId}:
  *    delete:
- *      summary: Get one domain
+ *      summary: Remove an existing domain
  *      parameters:
  *        - in: path
  *          name: agentId
