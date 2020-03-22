@@ -120,9 +120,183 @@ router.get(routeDomain, ensureAuthenticated, controller.findIntents);
  */
 router.get(route, ensureAuthenticated, controller.findIntents);
 
+/**
+ * @swagger
+ * path:
+ *  /agents/{agentId}/domains/{domainId}/intents/{intentId}:
+ *    get:
+ *      summary: Get one intent
+ *      parameters:
+ *        - in: path
+ *          name: agentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the agent
+ *        - in: path
+ *          name: domainId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the domain
+ *        - in: path
+ *          name: intentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the intent
+ *      tags: [Intent]
+ *      responses:
+ *        "200":
+ *          description: Intents of the agent
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Intent'
+ *        "401":
+ *          description: You have no access
+ *        "404":
+ *          description: Intent not found
+ */
 router.get(routeDomainId, ensureAuthenticated, controller.findIntentById);
+
+/**
+ * @swagger
+ * path:
+ *  /agents/{agentId}/intents/{intentId}:
+ *    get:
+ *      summary: Get one intent
+ *      parameters:
+ *        - in: path
+ *          name: agentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the agent
+ *        - in: path
+ *          name: intentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the intent
+ *      tags: [Intent]
+ *      responses:
+ *        "200":
+ *          description: Intents of the agent
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Intent'
+ *        "401":
+ *          description: You have no access
+ *        "404":
+ *          description: Intent not found
+ */
 router.get(routeId, ensureAuthenticated, controller.findIntentById);
+
+/**
+ * @swagger
+ * path:
+ *  /agents/{agentId}/intents:
+ *    post:
+ *      summary: Insert a new intent for an agent
+ *      parameters:
+ *        - in: path
+ *          name: agentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the agent
+ *      tags: [Intent]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Intent'
+ *      responses:
+ *        "200":
+ *          description: Intents of the agent
+ *          content:
+ *            application/json:
+ *              schema:
+*                  $ref: '#/components/schemas/Intent'
+ *        "400":
+ *          description: Domain id is mandatory
+ *        "401":
+ *          description: You have no access
+ *        "404":
+ *          description: Domain not found
+ *        "409":
+ *          description: Intent with same tag already exists in this domain
+ */
 router.post(route, controller.createIntent);
+
+/**
+ * @swagger
+ * path:
+ *  /agents/{agentId}/intents/{intentId}:
+ *    put:
+ *      summary: Modify an existing intent
+ *      parameters:
+ *        - in: path
+ *          name: agentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the agent
+ *        - in: path
+ *          name: intentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the intent
+ *      tags: [Intent]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Intent'
+ *      responses:
+ *        "200":
+ *          description: Intents of the agent
+ *          content:
+ *            application/json:
+ *              schema:
+*                  $ref: '#/components/schemas/Intent'
+ *        "400":
+ *          description: Intent id is mandatory
+ *        "401":
+ *          description: You have no access
+ *        "404":
+ *          description: Intent not found
+ */
 router.put(routeId, controller.updateIntent);
+
+/**
+ * @swagger
+ * path:
+ *  /agents/{agentId}/intents/{intentId}:
+ *    delete:
+ *      summary: Remove an existing intent
+ *      parameters:
+ *        - in: path
+ *          name: agentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the agent
+ *        - in: path
+ *          name: intentId
+ *          type: string
+ *          required: true
+ *          description: Identifier of the intent
+ *      tags: [Intent]
+ *      responses:
+ *        "200":
+ *          description: Intents of the agent
+ *          content:
+ *            application/json:
+ *              schema:
+*                  $ref: '#/components/schemas/Intent'
+ *        "400":
+ *          description: Intent id is mandatory
+ *        "401":
+ *          description: You have no access
+ *        "404":
+ *          description: Intent not found
+ */
 router.delete(routeId, controller.deleteIntent);
 module.exports = router;
