@@ -31,7 +31,8 @@ async function doCall(url, fetchOptions) {
   try {
     const result = await fetch(path, fetchOptions)
     if (result.ok) {
-      return Promise.resolve(result.json())
+      let response = await result.json()
+      return Promise.resolve(response)
     } else {
       return Promise.reject(result)
     }

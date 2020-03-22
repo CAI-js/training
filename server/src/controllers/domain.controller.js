@@ -109,7 +109,7 @@ async function deleteDomain(req, res) {
     }
     await database.removeById(Collections.Domain, domainId);
     await database.remove(Collections.Intent, { domainId });
-    return res.status(200).send();
+    return res.status(200).send({});
   }
   return true;
 }

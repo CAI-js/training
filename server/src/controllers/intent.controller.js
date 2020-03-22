@@ -152,7 +152,7 @@ async function deleteIntent(req, res) {
       return res.status(404).send('Intent not found');
     }
     await database.remove(Collections.Intent, { intentId });
-    return res.status(200).send();
+    return res.status(200).send({});
   }
   return true;
 }
