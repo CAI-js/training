@@ -48,7 +48,7 @@
       :open="openNewDomainModal"
       @close="onCloseDialog"
     >
-      <new-domain-form @form-change="onFormChange" :initialData="this.domainData"/>
+      <new-domain-form @form-change="onFormChange" :initialData="this.initialDomainData"/>
       <div class="level">
         <b-button
           @click="clickSubmitDomain"
@@ -79,6 +79,7 @@ export default {
       isLoading: true,
       errorMessage: '',
       domainData: {},
+      initialDomainData: {},
       editDomainId: '',
     }
   },
@@ -106,16 +107,14 @@ export default {
         } else {
           this.domains.push(newDomain)
         }
-        this.openNewDomainModal = false
-        this.domainData = {}
-        this.editDomainId = ''
+        this.onCloseDialog()
       })
       .catch(error => {
         this.errorMessage = error
       })
     },
     clickEdit(domain) {
-      this.domainData = domain
+      this.initialDomainData = domain
       this.editDomainId = domain._id
       this.openNewDomainModal = true
     },
@@ -146,6 +145,7 @@ export default {
     onCloseDialog() {
       this.openNewDomainModal = false
       this.domainData = {}
+      this.initialDomainData = {}
       this.editDomainId = ''
     }
   }

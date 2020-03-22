@@ -4,7 +4,7 @@
       <div class="card-content">
         <h1 class="title">Login</h1>
         <p class="has-text-danger error-message" v-if="errorMessage">{{errorMessage}}</p>
-        <login-form :full-form="registering" @form-valid-change="onFormValidChange"/>
+        <login-form :full-form="registering" @form-change="onFormChange"/>
         <div class="level ">
           <b-button @click="clickSwitchMode">{{this.registering
           ? 'Back to login'
@@ -55,7 +55,7 @@ export default {
       }
       this.loading = false
     },
-    onFormValidChange ({valid, data}) {
+    onFormChange ({valid, data}) {
       this.errorMessage = ''
       this.isValidForm = valid
       if (valid) {

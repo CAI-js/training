@@ -1,20 +1,21 @@
 <template>
-  <form @change="formChange">
+  <form>
     <b-field label="Name">
-      <b-input type="text" v-model="name" required></b-input>
+      <b-input type="text" v-model="formData.name" required></b-input>
     </b-field>
     <b-field label="Description">
-      <b-input type="textarea" v-model="description"></b-input>
+      <b-input type="textarea" v-model="formData.description"></b-input>
     </b-field>
     <b-field label="Readers" :type="{'is-danger': this.errors.readers}" :message="{'Please use correct emails separated by commas or spaces': this.errors.readers}">
-      <b-input type="textarea" v-model="readers"></b-input>
+      <b-input type="textarea" v-model="formData.readers"></b-input>
     </b-field>
     <b-field label="Writers" :type="{'is-danger': this.errors.writers}" :message="{'Please use correct emails separated by commas or spaces': this.errors.writers}">
-      <b-input type="textarea" v-model="writers" ></b-input>
+      <b-input type="textarea" v-model="formData.writers" ></b-input>
     </b-field>
   </form>
 </template>
 <script>
+import formValidation from '../mixins/formValidation'
 
 function separateEmails(mailsString) {
   return mailsString.split(/[\s\t\n,;]/gm)
@@ -33,6 +34,7 @@ function areValidEmails(mailsArray) {
 }
 export default {
   name: "NewAgentForm",
+  mixins: [formValidation],
   props: {
     fullForm: {
       type: Boolean,
@@ -41,10 +43,12 @@ export default {
   },
   data() {
     return {
-      name: '',
-      description: '',
-      readers: '',
-      writers: '',
+      formData: {
+        name: '',
+        description: '',
+        readers: '',
+        writers: '',
+      },
       errors: {
         name: true,
         readers: false,
@@ -55,37 +59,20 @@ export default {
   methods: {
     validateForm() {
       this.errors = {
-        name: !this.name,
+        name: !this.formData.name,
         readers: this.parsedReaders ? !areValidEmails(this.parsedReaders) : false,
         writers: this.parsedWriters ? !areValidEmails(this.parsedWriters) : false
       }
     },
-    formChange() {
-      this.validateForm()
-      this.$emit('form-change', {
-      valid: this.formIsValid,
-      data: {
-        name: this.name,
-        description: this.description,
-        readers: this.parsedReaders,
-        writers: this.parsedWriters
-      }})
-    }
   },
   computed: {
-    formIsValid() {
-      for (const key in this.errors) {
-        if (this.errors[key] === true) return false
-      }
-      return true
-    },
     parsedReaders() {
-      if (!this.readers) return []
-      return separateEmails(this.readers)
+      if (!this.formData.readers) return []
+      return separateEmails(this.formData.readers)
     },
     parsedWriters() {
-      if (!this.writers) return []
-      return separateEmails(this.writers)
+      if (!this.formData.writers) return []
+      return separateEmails(this.formData.writers)
     }
   },
 }
