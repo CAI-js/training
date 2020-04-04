@@ -66,7 +66,7 @@ import apiDomains from '@/api/mixins/apiDomains'
 export default {
   name: 'Domains',
   mixins: [apiDomains],
-    components: {
+  components: {
     'new-domain-form': () => import(/* webpackChunkName: "extras" */'@/components/NewDomainForm'),
     'dialog-base': () => import(/* webpackChunkName: "extras" */'@/components/micro/DialogBase'),
   },
