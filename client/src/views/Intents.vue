@@ -10,6 +10,49 @@
           @click="clickNewIntent"
         >Create new intent</b-button>
     </div>
+    <section class="intents-list">
+      <b-table
+        :data="intents"
+        :striped="true"
+        :loading="isLoading"
+        :focusable="true"
+        :mobile-cards="true"
+        default-sort="name"
+      >
+        <template slot-scope="props">
+          <b-table-column field="name" label="Name" sortable class="is-capitalized">
+              {{ props.row.name }}
+          </b-table-column>
+
+          <b-table-column field="domain" label="Domain" sortable>
+              {{ getDomainName(props.row.domainId) }}
+          </b-table-column>
+
+          <b-table-column field="utterances" label="Utterances">
+              <list-viewer :content="props.row.utterances"/>
+          </b-table-column>
+
+          <b-table-column field="answers" label="Answers">
+            <list-viewer :content="props.row.answers"/>
+          </b-table-column>
+
+          <b-table-column label="Actions" width="150" numeric>
+              <b-button type="is-primary" aria-label="edit" @click="clickEdit(props.row)"><b-icon icon="pencil"></b-icon></b-button>
+              <b-button type="is-danger" aria-label="delete" @click="clickDelete(props.row)"><b-icon icon="delete"></b-icon></b-button>
+          </b-table-column>
+        </template>
+        <template slot="empty">
+          <section class="section">
+            <div class="content has-text-grey has-text-centered">
+              <p>
+                <b-icon icon="emoticon-sad" size="is-large"></b-icon>
+              </p>
+              <p>There's no intents yet. Start by creating one.</p>
+            </div>
+          </section>
+        </template>
+      </b-table>
+    </section>
     <dialog-base
       title="New intent"
       :error-message="errorMessage"
@@ -33,6 +76,7 @@
 import apiIntents from '@/api/mixins/apiIntents'
 import apiDomains from '@/api/mixins/apiDomains'
 import DomainSelector from '@/components/micro/DomainSelector'
+import ListViewer from '@/components/micro/ListViewer'
 
 export default {
   name: 'Intents',
@@ -40,7 +84,8 @@ export default {
   components: {
     'new-intent-form': () => import(/* webpackChunkName: "extras" */'@/components/NewIntentForm'),
     'dialog-base': () => import(/* webpackChunkName: "extras" */'@/components/micro/DialogBase'),
-    'domain-selector': DomainSelector
+    'domain-selector': DomainSelector,
+    'list-viewer': ListViewer,
   },
   data() {
     return {
@@ -64,12 +109,16 @@ export default {
   },
   methods: {
     loadIntents() {
-      this.apiGetIntents(this.agentId)
+      return this.apiGetIntents(this.agentId, this.selectedDomainId)
         .then(result => this.intents = result || [])
     },
     loadDomains() {
-      this.apiGetDomains(this.agentId)
+      return this.apiGetDomains(this.agentId)
         .then(result => this.domains = result || [])
+    },
+    getDomainName(domainId) {
+      const domain = this.domains.find(domain => domain._id === domainId)
+      return domain ? domain.name : ''
     },
     clickNewIntent() {
       this.initialIntentData = {
@@ -113,6 +162,10 @@ export default {
     },
     onSelectDomainId(eventData) {
       this.selectedDomainId = eventData
+      this.isLoading = true
+
+      this.loadIntents()
+        .finally(() => this.isLoading = false)
     }
   }
 }
@@ -124,6 +177,12 @@ export default {
 }
 .domain-selector {
   flex-grow: 1;
+}
+.intents-list {
+  margin-top: 2rem;
+}
+td .button:not(:last-child) {
+  margin-right: 1rem;
 }
 .level {
   margin-top: 2rem;
