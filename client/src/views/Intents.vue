@@ -147,6 +147,25 @@ export default {
         this.errorMessage = error
       })
     },
+    clickDelete(intent) {
+      this.$buefy.dialog.confirm({
+        title: 'Please confirm',
+        message: `You are going to delete intent "${intent.name}"`,
+        onConfirm: () => {
+          this.isLoading = true
+          this.apiDeleteIntent(this.agentId, {intentId: intent._id})
+            .catch(error => this.$buefy.notification.open({
+              duration: 2000,
+              message: error,
+              position: 'is-bottom-right',
+              type: 'is-danger',
+              hasIcon: true
+            }))
+            .finally(() => this.loadIntents())
+            .finally(() => this.isLoading = false)
+        }
+      })
+    },
     onFormChange ({valid, data}) {
       this.errorMessage = ''
       this.isValidForm = valid
@@ -163,7 +182,6 @@ export default {
     onSelectDomainId(eventData) {
       this.selectedDomainId = eventData
       this.isLoading = true
-
       this.loadIntents()
         .finally(() => this.isLoading = false)
     }

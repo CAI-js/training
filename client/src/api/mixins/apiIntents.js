@@ -36,5 +36,15 @@ export default {
           }
         })
     },
+    apiDeleteIntent(agentId, {intentId}) {
+      return api.delete(`agents/${agentId}/intents/${intentId}`)
+        .catch(error => {
+          if (error.status && error.status === 401) {
+            return Promise.reject('API error: User has no rights to modify this agent')
+          } else {
+            return genericErrorManagement(error)
+          }
+        })
+    },
   }
 }
