@@ -1,33 +1,49 @@
 <template>
   <form @change="formChange">
     <b-field label="Name">
-      <b-input type="text" v-model="formData.name" required :disabled="this.initialData.name"></b-input>
+      <b-input type="text" v-model="formData.name" required :disabled="initialData.name"></b-input>
     </b-field>
-    <b-field class="domain-selector" v-show="domains.length > 0" aria-label="Domain selector" type="is-primary">
-        <b-select placeholder="Select a domain" expanded v-model="formData.domain">
-            <option
-                v-for="domain in domains"
-                :value="domain._id"
-                :key="domain._id"
-                >
-                {{ domain.name }}
-            </option>
-        </b-select>
-    </b-field>
+    <domain-selector
+      :domains="domains"
+      :selectedDomainId="formData.domain ? formData.domain._id : ''"
+      :showLabel="true"
+      :error="errors.domain"
+      required
+      @select-domain="onSelectDomainId"/>
+    <input-tag
+      label="Utterances"
+      :tags="formData.utterances"
+      :errorMessage="errors.utterances ? 'Please add at least one utterance' : ''"
+      @add-tag="onAddUtterance"
+      @remove-tag="onRemoveUtterance"
+    />
+    <input-tag
+      label="Answers"
+      :tags="formData.answers"
+      :errorMessage="errors.answers ? 'Please add at least one answer' : ''"
+      @add-tag="onAddAnswer"
+      @remove-tag="onRemoveAnswer"
+    />
   </form>
 </template>
 <script>
 import formValidation from '../mixins/formValidation'
+import DomainSelector from './micro/DomainSelector'
+import InputTag from './micro/InputTag'
 
 export default {
   name: "NewIntentForm",
   mixins: [formValidation],
+  components: {
+    'domain-selector': DomainSelector,
+    'input-tag': InputTag
+  },
   props: {
     initialData: {
       type: Object,
       default: () => ({
         name: '',
-        domain: ''
+        domain: {}
       })
     },
     domains: {
@@ -41,6 +57,8 @@ export default {
       errors: {
         name: true,
         domain: false,
+        utterances: false,
+        answers: false
       }
     }
   },
@@ -48,8 +66,43 @@ export default {
     validateForm() {
       this.errors = {
         name: !this.formData.name,
+        domain: !this.formData.domain,
+        utterances: !this.formData.utterances || this.formData.utterances.length === 0,
+        answers: !this.formData.answers || this.formData.answers.length === 0
       }
     },
+    onSelectDomainId(eventData) {
+      this.formData.domain = this.domains.find(domain => domain._id === eventData)
+    },
+    addToFormDataArray(arrayName, value) {
+        if (!this.formData[arrayName]) {
+          this.formData[arrayName] = []
+        }
+        this.formData[arrayName].push(value)
+        this.formData = {...this.formData}
+    },
+    removeToFormDataArray(arrayName, value) {
+      const valueIndex = this.formData[arrayName].findIndex(item => item === value)
+      if (valueIndex !== -1) {
+        this.formData[arrayName].splice(valueIndex, 1)
+      }
+    },
+    onAddUtterance(eventData) {
+      if (eventData) {
+        this.addToFormDataArray('utterances', eventData)
+      }
+    },
+    onAddAnswer(eventData) {
+      if (eventData) {
+        this.addToFormDataArray('answers', eventData)
+      }
+    },
+    onRemoveUtterance(eventData) {
+      this.removeToFormDataArray('utterances', eventData)
+    },
+    onRemoveAnswer(eventData) {
+      this.removeToFormDataArray('answers', eventData)
+    }
   },
 }
 </script>

@@ -69,6 +69,7 @@ async function findIntentById(req, res) {
 
 async function createIntent(req, res) {
   const agent = await ensureAgentById(req, res);
+  console.log('MSG: createIntent -> agent', agent)
   if (agent) {
     if (!agent.canWrite) {
       return res.status(401).send('You have no rights to modify this bot');

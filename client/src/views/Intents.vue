@@ -2,24 +2,13 @@
   <div>
     <h1 class="title">Agent intents</h1>
       <div class="first-line">
-      <b-field class="domain-selector" v-show="domains.length > 0" aria-label="Domain selector" type="is-primary">
-        <b-select v-model="selectedDomainId" expanded>
-          <option value="">Select a domain</option>
-          <option
-              v-for="domain in domains"
-              :value="domain._id"
-              :key="domain._id"
-              >
-              {{ domain.name }}
-          </option>
-        </b-select>
-      </b-field>
-      <b-button
-        type="is-primary"
-        :outlined="intents.length > 0"
-        icon-right="plus"
-        @click="clickNewIntent"
-      >Create new intent</b-button>
+        <domain-selector :domains="domains" :selectedDomainId="selectedDomainId" @select-domain="onSelectDomainId"/>
+        <b-button
+          type="is-primary"
+          :outlined="intents.length > 0"
+          icon-right="plus"
+          @click="clickNewIntent"
+        >Create new intent</b-button>
     </div>
     <dialog-base
       title="New intent"
@@ -27,7 +16,7 @@
       :open="openNewIntentModal"
       @close="onCloseDialog"
     >
-      <new-intent-form @form-change="onFormChange" :initialData="this.initialIntentData"/>
+      <new-intent-form @form-change="onFormChange" :initialData="this.initialIntentData" :domains="domains"/>
       <div class="level">
         <b-button
           @click="clickSubmitIntent"
@@ -43,12 +32,15 @@
 <script>
 import apiIntents from '@/api/mixins/apiIntents'
 import apiDomains from '@/api/mixins/apiDomains'
+import DomainSelector from '@/components/micro/DomainSelector'
+
 export default {
   name: 'Intents',
   mixins: [apiIntents, apiDomains],
   components: {
     'new-intent-form': () => import(/* webpackChunkName: "extras" */'@/components/NewIntentForm'),
     'dialog-base': () => import(/* webpackChunkName: "extras" */'@/components/micro/DialogBase'),
+    'domain-selector': DomainSelector
   },
   data() {
     return {
@@ -80,24 +72,31 @@ export default {
         .then(result => this.domains = result || [])
     },
     clickNewIntent() {
+      this.initialIntentData = {
+        domain: this.domains.find(domain => domain._id === this.selectedDomainId)
+      }
       this.openNewIntentModal = true
     },
     clickSubmitIntent() {
       // const promise = this.editDomainId
       //   ? this.apiPutDomain(this.agentId, {...this.domainData, domainId: this.editDomainId})
       //   : this.apiPostDomain(this.agentId, this.domainData)
-      // promise.then((newDomain) => {
-      //   if (this.editDomainId) {
-      //     const editedDomainIndex = this.domains.findIndex(domain => domain._id === this.editDomainId)
-      //     this.domains.splice(editedDomainIndex, 1, newDomain)
-      //   } else {
-      //     this.domains.push(newDomain)
-      //   }
+      this.apiPostIntent(this.agentId, {
+        ...this.intentData,
+        domainId: this.intentData.domain._id
+      })
+      .then((newIntent) => {
+        // if (this.editDomainId) {
+        //   const editedDomainIndex = this.intents.findIndex(domain => domain._id === this.editDomainId)
+        //   this.intents.splice(editedDomainIndex, 1, newIntent)
+        // } else {
+          this.intents.push(newIntent)
+        // }
         this.onCloseDialog()
-      // })
-      // .catch(error => {
-      //   this.errorMessage = error
-      // })
+      })
+      .catch(error => {
+        this.errorMessage = error
+      })
     },
     onFormChange ({valid, data}) {
       this.errorMessage = ''
@@ -111,6 +110,9 @@ export default {
       this.intentData = {}
       this.initialIntentData = {}
       this.editIntentId = ''
+    },
+    onSelectDomainId(eventData) {
+      this.selectedDomainId = eventData
     }
   }
 }
@@ -122,5 +124,8 @@ export default {
 }
 .domain-selector {
   flex-grow: 1;
+}
+.level {
+  margin-top: 2rem;
 }
 </style>
