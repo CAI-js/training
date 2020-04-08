@@ -122,30 +122,31 @@ export default {
     },
     clickNewIntent() {
       this.initialIntentData = {
-        domain: this.domains.find(domain => domain._id === this.selectedDomainId)
+        domainId: this.selectedDomainId
       }
       this.openNewIntentModal = true
     },
     clickSubmitIntent() {
-      // const promise = this.editDomainId
-      //   ? this.apiPutDomain(this.agentId, {...this.domainData, domainId: this.editDomainId})
-      //   : this.apiPostDomain(this.agentId, this.domainData)
-      this.apiPostIntent(this.agentId, {
-        ...this.intentData,
-        domainId: this.intentData.domain._id
-      })
-      .then((newIntent) => {
-        // if (this.editDomainId) {
-        //   const editedDomainIndex = this.intents.findIndex(domain => domain._id === this.editDomainId)
-        //   this.intents.splice(editedDomainIndex, 1, newIntent)
-        // } else {
+      const promise = this.editIntentId
+        ? this.apiPutIntent(this.agentId, {...this.intentData, intentId: this.editIntentId})
+        : this.apiPostIntent(this.agentId, this.intentData)
+      promise.then((newIntent) => {
+        if (this.editIntentId) {
+          const editedIntentId = this.intents.findIndex(intent => intent._id === this.editIntentId)
+          this.intents.splice(editedIntentId, 1, newIntent)
+        } else {
           this.intents.push(newIntent)
-        // }
+        }
         this.onCloseDialog()
       })
       .catch(error => {
         this.errorMessage = error
       })
+    },
+    clickEdit(intent) {
+      this.initialIntentData = intent
+      this.editIntentId = intent._id
+      this.openNewIntentModal = true
     },
     clickDelete(intent) {
       this.$buefy.dialog.confirm({

@@ -5,7 +5,7 @@
     </b-field>
     <domain-selector
       :domains="domains"
-      :selectedDomainId="formData.domain ? formData.domain._id : ''"
+      :selectedDomainId="formData.domainId"
       :showLabel="true"
       :error="errors.domain"
       required
@@ -27,6 +27,7 @@
   </form>
 </template>
 <script>
+const deepClone = require('rfdc')()
 import formValidation from '../mixins/formValidation'
 import DomainSelector from './micro/DomainSelector'
 import InputTag from './micro/InputTag'
@@ -53,7 +54,7 @@ export default {
   },
   data() {
     return {
-      formData: {...this.initialData},
+      formData: deepClone(this.initialData),
       errors: {
         name: true,
         domain: false,
@@ -66,13 +67,13 @@ export default {
     validateForm() {
       this.errors = {
         name: !this.formData.name,
-        domain: !this.formData.domain,
+        domain: !this.formData.domainId,
         utterances: !this.formData.utterances || this.formData.utterances.length === 0,
         answers: !this.formData.answers || this.formData.answers.length === 0
       }
     },
     onSelectDomainId(eventData) {
-      this.formData.domain = this.domains.find(domain => domain._id === eventData)
+      this.formData.domainId = eventData
     },
     addToFormDataArray(arrayName, value) {
         if (!this.formData[arrayName]) {

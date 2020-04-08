@@ -23,7 +23,7 @@ export default {
               case 400:
                 return Promise.reject('API error: Domain id is mandatory')
               case 401:
-                return Promise.reject('API error: User has no rights to modify this intent')
+                return Promise.reject('API error: User has no rights to modify this agent')
               case 404:
                 return Promise.reject('API error: Domain not found')
               case 409:
@@ -46,5 +46,20 @@ export default {
           }
         })
     },
+    apiPutIntent(agentId, { name, domainId, utterances, answers, intentId }) {
+      return api.put(`agents/${agentId}/intents/${intentId}`, {name, domainId, utterances, answers})
+        .catch(error => {
+          switch (error.status) {
+            case 400:
+              return Promise.reject('API error: Intent id is mandatory')
+            case 401:
+              return Promise.reject('API error: User has no rights to modify this agent')
+            case 404:
+              return Promise.reject('API error: Intent not found')
+            default:
+              return genericErrorManagement(error)
+          }
+        })
+    }
   }
 }
