@@ -224,7 +224,7 @@ router.get(routeId, ensureAuthenticated, controller.findIntentById);
  *        "409":
  *          description: Intent with same tag already exists in this domain
  */
-router.post(route, controller.createIntent);
+router.post(route, ensureAuthenticated, controller.createIntent);
 
 /**
  * @swagger
@@ -264,7 +264,7 @@ router.post(route, controller.createIntent);
  *        "404":
  *          description: Intent not found
  */
-router.put(routeId, controller.updateIntent);
+router.put(routeId, ensureAuthenticated, controller.updateIntent);
 
 /**
  * @swagger
@@ -298,5 +298,5 @@ router.put(routeId, controller.updateIntent);
  *        "404":
  *          description: Intent not found
  */
-router.delete(routeId, controller.deleteIntent);
+router.delete(routeId, ensureAuthenticated, controller.deleteIntent);
 module.exports = router;
